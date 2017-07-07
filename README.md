@@ -31,9 +31,11 @@ You will probably want some sort of snapshot/backup policy for your PV as it can
 
 As of 1.6, Kubernetes lacks help in this area.  
 
-You can use your provider, such as GKE, to resize the volume.  You'll likely have to shell into the nfs-server container and do a resize2fs, which can be installed with "yum install e2fsprogs".
+You can use your provider, such as GKE, to resize the volume.  
 
-This does not update the PersistentVolumeClaim (PVC).  While you can update the YAML you use to create the PVC, in Kubernetes 1.6, you cannot change the capacity of a bound PVC. Deleting and re-creating the PVC will destroy the PV, so it is not a practical option.  
+You'll likely have to follow that up by shelling into the nfs-server container and do a resize2fs to resize the file system, which can be installed with "yum install e2fsprogs".  Use "df -h" to identify the device mounted at /exports.  
+
+This does not update the PersistentVolumeClaim (PVC).  While you can update the YAML you use to create the PVC for the next time you use it, in Kubernetes 1.6, you cannot change the capacity of a bound PVC. Deleting and re-creating the PVC will destroy the PV, so it is not a practical option.  
 
 ## Known Issues
 
