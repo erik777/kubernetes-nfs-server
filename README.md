@@ -2,9 +2,9 @@
 
 YAML and instructions for deploying an nfs-server in Kubernetes (K8S), which can then be used by your pods.  
 
-This is derived from the K8S [NFS Example](https://github.com/kubernetes/kubernetes/tree/master/examples/volumes/nfs).  I could not get the PersistentVolumeClaim (PVC) to use the PersistentVolume (PV) on Google Container Engine (GKE) that is defined for the client to use an NFS share in the example.  This could be a GKE issue.  The sample included here demonstrates how to directly mount an NFS share via your pod's YAML, skipping the PVC/PV declarations.  This method works in GKE 1.6.  
+This is derived from the K8S [NFS Example](https://github.com/kubernetes/kubernetes/tree/master/examples/volumes/nfs).  I could not get the PersistentVolumeClaim (PVC) to use the PersistentVolume (PV) on Google Container Engine (GKE) that is defined for the client to use an NFS share in the example.  This could be a GKE issue.  The sample included here demonstrates how to directly mount an NFS share via your pod's YAML, skipping the client-side PVC/PV declarations.  This method works in GKE 1.6.  
 
-This defines two storage classes, fast (ssd) and slow.  This is the only YAML that is specific to GKE.  You can create your own storage classes for your provider if not GKE.  Or, you can just comment out the storageClassName declaration in the nfc-server-pvc.yaml.
+This defines two storage classes, fast (ssd) and slow.  This is the only YAML that is specific to GKE.  You can create your own storage classes for your provider if not GKE.  Or, you can just comment out the storageClassName declaration in the nfc-server-pvc.yaml to use your provider's default.
 
 The create-nfs-server file shows you the commands to execute, and the order, to create your nfs-server.  
 
@@ -17,7 +17,7 @@ consume the NFS shares.  Here is what you will add to your pod spec:
           server: <NFS_CLUSTER_IP>
           path: /
 
-This maps to /exports in your server.  You can map to subfolders inside exports.  But, that folder must exist already when you create your pod.  Otherwise, you willyou  get an rpcbind error and your pod will never run.  
+This maps to /exports in your server.  You can map to subfolders inside exports.  But, that folder must exist already when you create your pod.  Otherwise, you will get an error and your pod will never run.  
 
 If you create /exports/myapp/data in your nfs-server, you can then use this path in your pod declaration:
 
